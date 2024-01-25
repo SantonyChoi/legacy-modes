@@ -13,9 +13,6 @@ export const yaml = {
       return "comment";
     }
 
-    if (stream.match(/^('([^']|\\.)*'?|"([^"]|\\.)*"?)/))
-      return "string";
-
     if (state.literal && stream.indentation() > state.keyCol) {
       stream.skipToEnd(); return "string";
     } else if (state.literal) { state.literal = false; }
@@ -77,6 +74,9 @@ export const yaml = {
       return "atom";
     }
     if (state.pair && stream.match(/^:\s*/)) { state.pairStart = true; return 'meta'; }
+
+    if (stream.match(/^('([^']|\\.)*'?|"([^"]|\\.)*"?)/))
+      return "string";
 
     /* nothing found, continue */
     state.pairStart = false;
